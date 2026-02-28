@@ -1,4 +1,4 @@
-FROM rocm/pytorch:rocm7.1.1_ubuntu24.04_py3.12_pytorch_release_2.9.1
+FROM rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
@@ -12,7 +12,6 @@ RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/downl
 
 RUN unzip release.zip -d ./wheels
 
-# korrekte version angeben
 RUN pip install --no-cache-dir wheels/*cp312*.whl
 
 RUN rm -rf release.zip wheels/
