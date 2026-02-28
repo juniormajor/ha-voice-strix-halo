@@ -1,5 +1,7 @@
 FROM rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1
 
+WORKDIR /app
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROCM_PATH=/opt/rocm
 ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
@@ -31,19 +33,27 @@ RUN cd /tmp/ctranslate2 && \
       -DBUILD_CLI=OFF && \
     make -j$(nproc) && \
     make install && \
-    ldconfig
+    cd /tmp/ctranslate2/python && \
+    pip install --no-cache-dir . && \
+    rm -rf /tmp/ctranslate2
 
-# ERST alle anderen Packages (ziehen ctranslate2-CPU rein)
-RUN pip install wyoming-faster-whisper faster-whisper
+# Install faster-whisper
+RUN pip install --no-cache-dir faster-whisper
 
-# DANN unsere HIP-Version force-reinstall ZULETZT
-# CTRANSLATE2_ROOT damit die Python-Bindings unsere .so finden
-RUN cd /tmp/ctranslate2/python && \
-    pip install pybind11 && \
-    CTRANSLATE2_ROOT=/usr/local \
-    pip install --no-build-isolation --force-reinstall --no-deps .
+# Install Wyoming protocol and faster-whisper integration
+RUN pip install --no-cache-dir \
+    wyoming \
+    "wyoming-faster-whisper @ git+https://github.com/rhasspy/wyoming-faster-whisper.git"
 
-RUN rm -rf /tmp/ctranslate2
+# Create directory for models
+RUN mkdir -p /data/models
 
-WORKDIR /app
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Expose Wyoming protocol port
 EXPOSE 10300
+
+# Set entrypoint - note: device="cuda" is correct for ROCm via HIP
+ENTRYPOINT ["/app/entrypoint.sh"]
