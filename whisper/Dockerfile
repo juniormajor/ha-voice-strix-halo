@@ -22,8 +22,6 @@ RUN git clone --recurse-submodules \
 
 RUN cd /tmp/ctranslate2 && \
     mkdir build && cd build && \
-    AMDGPU_TARGETS="gfx1151" \
-    GPU_TARGETS="gfx1151" \
     cmake .. \
       -DWITH_HIP=ON \
       -DWITH_MKL=OFF \
@@ -37,10 +35,9 @@ RUN cd /tmp/ctranslate2 && \
       -DCMAKE_CXX_COMPILER=/opt/rocm/lib/llvm/bin/clang++ \
       -DCMAKE_C_COMPILER=/opt/rocm/lib/llvm/bin/clang \
       -DCMAKE_PREFIX_PATH=/opt/rocm \
-      -DBUILD_CLI=OFF && \
-    make -j$(nproc) && \
-    make install && \
-    ldconfig
+      -DBUILD_CLI=OFF 2>&1 && \
+    make -j1 2>&1 | grep -E "^.*(error:|fatal error:).*$" | grep -v "deprecated\|warning" || \
+    (make -j1 2>&1 | tail -30 && exit 1)
 
 # Python-Bindings installieren
 RUN cd /tmp/ctranslate2/python && \
