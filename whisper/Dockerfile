@@ -12,7 +12,7 @@ RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/downl
 
 RUN unzip release.zip -d ./wheels
 
-RUN sh -c "pip install --no-cache-dir wheels/*cp312*.whl"
+RUN sh -c "pip install --no-cache-dir wheels/ctranslate2-4.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
 
 RUN rm -rf release.zip wheels/
 
