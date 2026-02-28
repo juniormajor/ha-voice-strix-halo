@@ -1,66 +1,31 @@
-FROM rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1
-
+FROM rocm/pytorch:rocm7.1.1_ubuntu24.04_py3.12_pytorch_release_2.9.1
 WORKDIR /app
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV ROCM_PATH=/opt/rocm
-ENV HSA_OVERRIDE_GFX_VERSION=11.5.1
-ENV LD_LIBRARY_PATH=/opt/rocm/lib:/opt/rocm/lib/llvm/lib:/usr/local/lib
-
 RUN apt-get update && apt-get install -y \
-    git cmake build-essential python3-dev \
-    libopenblas-dev pybind11-dev \
+    curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+    
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel pybind11
 
-# Upstream CTranslate2 mit ROCm-Support (v4.5.0+)
-RUN git clone --recurse-submodules \
-    --branch v4.5.0 \
-    https://github.com/OpenNMT/CTranslate2.git /tmp/ctranslate2
+RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/download/v4.7.1/rocm-python-wheels-Linux.zip
 
-RUN cd /tmp/ctranslate2 && \
-    mkdir build && cd build && \
-    cmake .. \
-      -DWITH_HIP=ON \
-      -DWITH_MKL=OFF \
-      -DWITH_OPENBLAS=ON \
-      -DCMAKE_HIP_ARCHITECTURES="gfx1151" \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DOPENMP_RUNTIME=COMP \
-      -DCMAKE_HIP_COMPILER=/opt/rocm/lib/llvm/bin/clang++ \
-      -DCMAKE_CXX_COMPILER=/opt/rocm/lib/llvm/bin/clang++ \
-      -DCMAKE_C_COMPILER=/opt/rocm/lib/llvm/bin/clang \
-      -DCMAKE_PREFIX_PATH=/opt/rocm \
-      -DBUILD_CLI=OFF && \
-    make -j$(nproc) && \
-    make install && \
-    ldconfig
+RUN unzip release.zip -d ./wheels
 
-# Install faster-whisper
+# korrekte version angeben
+RUN pip install --no-cache-dir wheels/*cp312*.whl
+
+RUN rm -rf release.zip wheels/
+
 RUN pip install --no-cache-dir faster-whisper
 
-# Install Wyoming protocol and faster-whisper integration
-RUN pip install --no-cache-dir \
-    wyoming \
-    "wyoming-faster-whisper @ git+https://github.com/rhasspy/wyoming-faster-whisper.git"
+RUN pip install --no-cache-dir wyoming "wyoming-faster-whisper @ git+https://github.com/rhasspy/wyoming-faster-whisper.git"
 
-# DANN unsere HIP-Version force-reinstall ZULETZT
-# CTRANSLATE2_ROOT damit die Python-Bindings unsere .so finden
-RUN cd /tmp/ctranslate2/python && \
-    pip install pybind11 && \
-    CTRANSLATE2_ROOT=/usr/local \
-    pip install --no-build-isolation --force-reinstall --no-deps .
-
-RUN rm -rf /tmp/ctranslate2
-
-# Create directory for models
 RUN mkdir -p /data/models
 
-# Copy entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Expose Wyoming protocol port
 EXPOSE 10300
 
-# Set entrypoint - note: device="cuda" is correct for ROCm via HIP
 ENTRYPOINT ["/app/entrypoint.sh"]
