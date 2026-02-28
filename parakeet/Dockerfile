@@ -25,6 +25,7 @@ RUN pip install --no-cache-dir \
     tensorboard \
     text-unidecode \
     "tqdm>=4.41.0" \
+    "setuptools>=70.0.0" \
     wget \
     wrapt
 
@@ -38,7 +39,11 @@ RUN pip install --no-cache-dir \
     peft \
     "torchmetrics>=0.11.0" \
     "transformers~=4.57.0" \
-    webdataset>=0.2.86
+    webdataset>=0.2.86 \
+    nv_one_logger_core>=2.3.1 \
+    nv_one_logger_training_telemetry>=2.3.1 \
+    nv_one_logger_pytorch_lightning_integration>=2.3.1 \
+    wandb
 
 # ASR requirements (requirements_asr.txt)
 RUN pip install --no-cache-dir \
@@ -70,6 +75,7 @@ RUN pip install --no-cache-dir \
     datasets \
     inflect \
     pandas \
+    mediapy==1.1.6 \
     "sacremoses>=0.0.43" \
     "sentencepiece<1.0.0"
 
