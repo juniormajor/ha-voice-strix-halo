@@ -24,7 +24,10 @@ RUN pip install --no-cache-dir \
     jiwer \
     lhotse \
     webdataset \
-    huggingface_hub
+    huggingface_hub \
+    lightning \
+    pytorch-lightning \
+    torchmetrics
 
 # Install NeMo toolkit without pulling in its own PyTorch
 # --no-deps avoids overwriting the ROCm PyTorch already in the image
