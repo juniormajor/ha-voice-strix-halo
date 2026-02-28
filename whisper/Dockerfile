@@ -33,9 +33,7 @@ RUN cd /tmp/ctranslate2 && \
       -DBUILD_CLI=OFF && \
     make -j$(nproc) && \
     make install && \
-    cd /tmp/ctranslate2/python && \
-    pip install --no-cache-dir . && \
-    rm -rf /tmp/ctranslate2
+    ldconfig
 
 # Install faster-whisper
 RUN pip install --no-cache-dir faster-whisper
@@ -44,6 +42,15 @@ RUN pip install --no-cache-dir faster-whisper
 RUN pip install --no-cache-dir \
     wyoming \
     "wyoming-faster-whisper @ git+https://github.com/rhasspy/wyoming-faster-whisper.git"
+
+# DANN unsere HIP-Version force-reinstall ZULETZT
+# CTRANSLATE2_ROOT damit die Python-Bindings unsere .so finden
+RUN cd /tmp/ctranslate2/python && \
+    pip install pybind11 && \
+    CTRANSLATE2_ROOT=/usr/local \
+    pip install --no-build-isolation --force-reinstall --no-deps .
+
+RUN rm -rf /tmp/ctranslate2
 
 # Create directory for models
 RUN mkdir -p /data/models
