@@ -33,11 +33,15 @@ RUN cd /tmp/ctranslate2 && \
     make install && \
     ldconfig
 
+# ERST alle anderen Packages (ziehen ctranslate2-CPU rein)
 RUN pip install wyoming-faster-whisper faster-whisper
 
+# DANN unsere HIP-Version force-reinstall ZULETZT
+# CTRANSLATE2_ROOT damit die Python-Bindings unsere .so finden
 RUN cd /tmp/ctranslate2/python && \
     pip install pybind11 && \
-    pip install --no-build-isolation .
+    CTRANSLATE2_ROOT=/usr/local \
+    pip install --no-build-isolation --force-reinstall --no-deps .
 
 RUN rm -rf /tmp/ctranslate2
 
