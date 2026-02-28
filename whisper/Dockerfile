@@ -22,11 +22,15 @@ RUN git clone --recurse-submodules \
 
 RUN cd /tmp/ctranslate2 && \
     mkdir build && cd build && \
+    AMDGPU_TARGETS="gfx1151" \
+    GPU_TARGETS="gfx1151" \
     cmake .. \
       -DWITH_HIP=ON \
       -DWITH_MKL=OFF \
       -DWITH_OPENBLAS=ON \
-      -DCMAKE_HIP_ARCHITECTURES=gfx1151 \
+      -DAMDGPU_TARGETS="gfx1151" \
+      -DGPU_TARGETS="gfx1151" \
+      -DCMAKE_HIP_ARCHITECTURES="gfx1151" \
       -DCMAKE_BUILD_TYPE=Release \
       -DOPENMP_RUNTIME=COMP \
       -DCMAKE_HIP_COMPILER=/opt/rocm/lib/llvm/bin/clang++ \
