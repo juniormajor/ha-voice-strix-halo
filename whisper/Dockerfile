@@ -33,11 +33,11 @@ RUN cd /tmp/ctranslate2 && \
     make install && \
     ldconfig
 
+RUN pip install wyoming-faster-whisper faster-whisper
+
 RUN cd /tmp/ctranslate2/python && \
     pip install pybind11 && \
     pip install --no-build-isolation .
-
-RUN pip install wyoming-faster-whisper faster-whisper
 
 RUN rm -rf /tmp/ctranslate2
 
