@@ -4,7 +4,7 @@ Docker setup for Wyoming protocol speech services designed for the AMD Ryzen AI 
 
 ## Features
 
-- **Multiple STT engines** - Whisper, Moonshine, and Voxtral
+- **Multiple STT engines** - Whisper, Moonshine, Parakeet, and Voxtral
 - **Multiple TTS engines** - Qwen3, Chatterbox Turbo, Pocket, and Kokoro
 - **ROCm 7.1.1** GPU acceleration for AMD GPUs (where applicable)
 - **Wyoming Protocol** for easy Home Assistant integration
@@ -14,6 +14,7 @@ Docker setup for Wyoming protocol speech services designed for the AMD Ryzen AI 
 ### Speech-to-Text (STT)
 - **wyoming-whisper** - Speech-to-Text on port `10300` (CTranslate2 + Whisper)
 - **wyoming-moonshine** - Real-time STT on port `10302` (Moonshine ONNX, CPU-only, ultra-low latency)
+- **wyoming-parakeet** - STT on port `10303` (NVIDIA NeMo parakeet-tdt-0.6b-v3, GPU-accelerated)
 - **wyoming-voxtral** (Not working yet) - Real-time STT on port `10301` (vLLM + Mistral Voxtral, <500ms latency)
 
 ### Text-to-Speech (TTS)
@@ -95,6 +96,18 @@ Available environment variables:
 - CPU-only - no GPU required, lightweight Docker image
 - Supports 8 languages: en, ar, zh, ja, ko, es, uk, vi
 
+### Parakeet (STT) Configuration
+
+Available environment variables:
+- `PARAKEET_MODEL` - HuggingFace model ID (default: nvidia/parakeet-tdt-0.6b-v3)
+- `PARAKEET_DEVICE` - cuda:0 (GPU) or cpu
+- `PARAKEET_DEBUG` - true/false
+
+**Features:**
+- NVIDIA NeMo TDT (Token-and-Duration Transducer) architecture
+- GPU-accelerated via ROCm/PyTorch
+- 0.6B parameter model, good accuracy with moderate VRAM usage
+
 ### Voxtral (STT) Configuration
 
 Available environment variables:
@@ -167,6 +180,7 @@ CPU-only, ultra-low latency (~200ms to first audio chunk).
 3. Add each service separately:
    - **Whisper**: Host = your-docker-host, Port = 10300
    - **Moonshine**: Host = your-docker-host, Port = 10302
+   - **Parakeet**: Host = your-docker-host, Port = 10303
    - **Voxtral**: Host = your-docker-host, Port = 10301
    - **Qwen3-TTS**: Host = your-docker-host, Port = 10200
    - **Chatterbox Turbo**: Host = your-docker-host, Port = 10201
@@ -180,6 +194,7 @@ CPU-only, ultra-low latency (~200ms to first audio chunk).
 - [Wyoming Protocol](https://github.com/rhasspy/wyoming)
 - [Faster Whisper](https://github.com/SYSTRAN/faster-whisper)
 - [Moonshine](https://github.com/moonshine-ai/moonshine)
+- [NVIDIA Parakeet TDT](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3)
 - [Mistral Voxtral](https://huggingface.co/mistralai/Voxtral-Mini-4B-Realtime-2602)
 - [vLLM](https://docs.vllm.ai/)
 
@@ -202,6 +217,8 @@ CPU-only, ultra-low latency (~200ms to first audio chunk).
 - Wyoming: MIT License
 - faster-whisper: MIT License
 - Moonshine: MIT License
+- Parakeet TDT: Apache 2.0 License
+- NVIDIA NeMo: Apache 2.0 License
 - Voxtral: Apache 2.0 License
 - vLLM: Apache 2.0 License
 - Qwen3-TTS: Apache 2.0 License
