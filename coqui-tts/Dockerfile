@@ -2,11 +2,13 @@ FROM rocm/pytorch:rocm7.2_ubuntu22.04_py3.10_pytorch_release_2.9.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV COQUI_TOS_AGREED=1
+ENV LD_LIBRARY_PATH=/opt/venv/lib/python3.10/site-packages/torch/lib:$LD_LIBRARY_PATH
 
 RUN apt-get update && apt-get install -y \
     git espeak-ng libsndfile1 ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip uninstall -y apex
 RUN pip install --no-cache-dir "TTS>=0.22.0"
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
