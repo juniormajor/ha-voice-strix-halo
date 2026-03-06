@@ -7,12 +7,11 @@ RUN apt-get update && apt-get install -y \
     git espeak-ng libsndfile1 ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir \
-    "TTS>=0.22.0" \
-    wyoming 
+RUN pip install --no-cache-dir "TTS>=0.22.0"
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
+RUN pip install --no-cache-dir .
 
 EXPOSE 10200
 
