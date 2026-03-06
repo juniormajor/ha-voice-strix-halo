@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir \
     gruut spacy langdetect \
     "transformers>=4.33,<4.46" tokenizers \
     inflect num2words pypinyin \
-    fsspec packaging hangul_romanize
+    fsspec packaging hangul_romanize pydantic_settings
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
