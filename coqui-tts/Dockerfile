@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir \
     "transformers>=4.33,<4.46" tokenizers \
     inflect num2words pypinyin \
     fsspec packaging hangul_romanize pydantic_settings \
-    sentence_stream zeroconf anyascii bangla bnnumerizer bnunicodenormalizer
+    sentence_stream zeroconf anyascii bangla bnnumerizer bnunicodenormalizer \
+    jamo
 
 RUN sed -i 's/return torch.load(f, map_location=map_location, \*\*kwargs)/return torch.load(f, map_location=map_location, weights_only=False, **kwargs)/' \
     /opt/venv/lib/python3.10/site-packages/TTS/utils/io.py
