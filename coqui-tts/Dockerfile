@@ -35,5 +35,5 @@ RUN pip install --no-cache-dir wyoming langdetect
 EXPOSE 10200
 
 ENTRYPOINT ["python", "-m", "wyoming_xtts", \
-    "--host", "0.0.0.0", \
+    "--uri", "0.0.0.0", \
     "--port", "10200"]
