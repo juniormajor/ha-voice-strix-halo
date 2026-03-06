@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install --no-cache-dir \
     "TTS>=0.22.0" \
-    wyoming \
-    numpy==1.26.4
+    wyoming 
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
