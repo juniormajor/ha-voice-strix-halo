@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir \
     coqpit trainer encodec \
     librosa soundfile pysbd \
     gruut spacy langdetect \
-    transformers tokenizers \
+    "transformers>=4.33,<4.46" tokenizers \
     inflect num2words pypinyin \
     fsspec packaging
 
