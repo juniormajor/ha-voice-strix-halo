@@ -23,6 +23,9 @@ RUN pip install --no-cache-dir \
     fsspec packaging hangul_romanize pydantic_settings \
     sentence_stream
 
+RUN sed -i 's/return torch.load(f, map_location=map_location, \*\*kwargs)/return torch.load(f, map_location=map_location, weights_only=False, **kwargs)/' \
+    /opt/venv/lib/python3.10/site-packages/TTS/utils/io.py
+    
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
 
