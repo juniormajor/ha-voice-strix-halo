@@ -38,4 +38,4 @@ RUN pip install --no-cache-dir wyoming langdetect
 EXPOSE 10200
 
 ENTRYPOINT ["python", "-m", "wyoming_xtts", \
-    "--uri", "0.0.0.0"]
+    "--uri", "tcp://0.0.0.0:10200"]
