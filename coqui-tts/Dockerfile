@@ -9,13 +9,27 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip uninstall -y apex
-RUN pip install --no-cache-dir "TTS>=0.22.0"
+
+# TTS ohne deps, damit PyTorch/torchvision/torchaudio nicht überschrieben werden
+RUN pip install --no-cache-dir --no-deps "TTS>=0.22.0"
+
+# Nur die TTS-Dependencies nachinstallieren, OHNE torch/torchvision/torchaudio
+RUN pip install --no-cache-dir \
+    coqpit trainer encodec \
+    librosa soundfile pysbd \
+    gruut spacy langdetect \
+    transformers tokenizers \
+    inflect num2words pypinyin \
+    fsspec packaging
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
 
 RUN sed -i 's/requires-python = ">=3.11"/requires-python = ">=3.10"/' pyproject.toml
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --no-deps .
+
+# Restliche wyoming-xtts deps
+RUN pip install --no-cache-dir wyoming langdetect
 
 EXPOSE 10200
 
