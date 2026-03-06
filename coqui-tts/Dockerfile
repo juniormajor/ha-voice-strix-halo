@@ -11,6 +11,8 @@ RUN pip install --no-cache-dir "TTS>=0.22.0"
 
 RUN git clone https://github.com/lmoe/wyoming-xtts.git /app
 WORKDIR /app
+
+RUN sed -i 's/requires-python = ">=3.11"/requires-python = ">=3.10"/' pyproject.toml
 RUN pip install --no-cache-dir .
 
 EXPOSE 10200
