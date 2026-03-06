@@ -1,4 +1,4 @@
-FROM rocm/pytorch:rocm7.2_ubuntu24.04_py3.12_pytorch_release_2.9.1
+FROM rocm/pytorch:rocm7.2_ubuntu22.04_py3.10_pytorch_release_2.9.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV COQUI_TOS_AGREED=1
