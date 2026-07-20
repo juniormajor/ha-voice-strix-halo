@@ -1,5 +1,5 @@
 #FROM rocm/pytorch:rocm7.2.2_ubuntu24.04_py3.12_pytorch_release_2.10.0
-FROM rocm/pytorch:rocm7.14_ubuntu26.04_py3.14_pytorch_release_2.12.0
+FROM rocm/pytorch:rocm7.14_ubuntu24.04_py3.13_pytorch_release_2.12.0
 WORKDIR /app
 
 RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g; s|http://archive.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources \
@@ -8,10 +8,10 @@ RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubu
     unzip \
  && rm -rf /var/lib/apt/lists/*
  
-# RUN apt-get update && apt-get install -y \
-#    curl \
-#    unzip \
-#    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y \
+#   curl \
+#   unzip \
+#   && rm -rf /var/lib/apt/lists/*
     
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel pybind11
 
@@ -21,7 +21,7 @@ RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/downl
 RUN unzip release.zip -d ./wheels
 
 #RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
-RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.8.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.8.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
 
 RUN rm -rf release.zip wheels/
 
