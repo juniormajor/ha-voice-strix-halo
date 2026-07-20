@@ -1,5 +1,5 @@
-#FROM rocm/pytorch:rocm7.2.2_ubuntu24.04_py3.12_pytorch_release_2.10.0
-FROM rocm/pytorch:rocm7.14_ubuntu24.04_py3.12_pytorch_release_2.10.0
+FROM rocm/pytorch:rocm7.2.2_ubuntu24.04_py3.12_pytorch_release_2.10.0
+#FROM rocm/pytorch:rocm7.14_ubuntu24.04_py3.12_pytorch_release_2.10.0
 WORKDIR /app
 
 #RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g; s|http://archive.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources \
