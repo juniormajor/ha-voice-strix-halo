@@ -2,16 +2,16 @@
 FROM rocm/pytorch:rocm7.14_ubuntu24.04_py3.13_pytorch_release_2.12.0
 WORKDIR /app
 
-RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g; s|http://archive.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources \
- && apt-get update && apt-get install -y \
-    curl \
-    unzip \
- && rm -rf /var/lib/apt/lists/*
+#RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g; s|http://archive.ubuntu.com/ubuntu|http://at.archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources \
+# && apt-get update && apt-get install -y \
+#    curl \
+#    unzip \
+# && rm -rf /var/lib/apt/lists/*
  
-#RUN apt-get update && apt-get install -y \
-#   curl \
-#   unzip \
-#   && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+   curl \
+   unzip \
+   && rm -rf /var/lib/apt/lists/*
     
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel pybind11
 
