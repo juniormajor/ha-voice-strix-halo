@@ -15,13 +15,13 @@ RUN apt-get update && apt-get install -y \
     
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel pybind11
 
-#RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/download/v4.7.1/rocm-python-wheels-Linux.zip
-RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/download/v4.8.1/rocm-python-wheels-Linux.zip
+RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/download/v4.7.1/rocm-python-wheels-Linux.zip
+#RUN curl -L -o release.zip https://github.com/OpenNMT/CTranslate2/releases/download/v4.8.1/rocm-python-wheels-Linux.zip
 
 RUN unzip release.zip -d ./wheels
 
-#RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
-RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.8.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.7.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+#RUN pip install --no-cache-dir wheels/temp-linux/ctranslate2-4.8.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
 
 RUN rm -rf release.zip wheels/
 
